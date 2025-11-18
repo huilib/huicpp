@@ -1,0 +1,34 @@
+##
+## File Name: mkvars.mk
+## Create Author: Joseph Hui
+## Create Date: Thu Apr 7 1039 2022
+## Description:
+## 		variables define for huicpp's main makefile.
+##
+
+
+DEPS_HOME = __1__DEPS_HOME_PATH__1__
+
+CURL_DEP_HOME = ${DEPS_HOME}/curl
+JSON_DEP_HOME = ${DEPS_HOME}/json
+OPENSSL_DEP_HOME = ${DEPS_HOME}/openssl
+MYSQL_DEP_HOME = ${DEPS_HOME}/mysql
+SQLITE_DEP_HOME = ${DEPS_HOME}/sqlite3
+
+CURL_INCLUDE_HOME = ${CURL_DEP_HOME}/include
+OPENSSL_INCLUDE_HOME = ${OPENSSL_DEP_HOME}/include
+MYSQL_INCLUDE_HOME = ${MYSQL_DEP_HOME}/include
+SQLITE_INCLUDE_HOME = ${SQLITE_DEP_HOME}/include
+
+CURL_LIB_HOME = ${CURL_DEP_HOME}/lib
+OPENSSL_LIB_HOME = ${OPENSSL_DEP_HOME}/lib
+MYSQL_LIB_HOME = ${MYSQL_DEP_HOME}/lib
+SQLITE_LIB_HOME = ${SQLITE_DEP_HOME}/lib
+
+INSTALL_OUTPUT = __1__INSTALL_OUTPUT__1__
+HUICPP_OUTPUT_LIB = ${INSTALL_OUTPUT}/huicpp
+HUICPP_OUTPUT_INCLUDE = ${INSTALL_OUTPUT}/huicpp/include
+
+
+PRONAME = huicpp
+CTNUM = 8
