@@ -96,6 +96,8 @@ public:
 
 	void SetPort(HN port);
 
+	const sockaddr_type& GetSockaddr() const { return m_addr; }
+
 public:
 	ADDR_TYPE GetAddrType () const override{
 		return ADDR_TYPE::IP_V4;
