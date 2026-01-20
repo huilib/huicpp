@@ -7,7 +7,6 @@
 #include <net/if.h>
 #include <ifaddrs.h>
 
-using namespace HUICPP;
 
 namespace {
 
@@ -90,44 +89,6 @@ void copyAddress(struct sockaddr_storage& to, struct sockaddr const* from) {
 	}
 }
 
-void setupNet4WithIpString(HCSTRR strIp, HN port, HIp4Addr::sockaddr_type& net) {
-
-	net.sin_family = AF_INET;
-	net.sin_port = htons(port);
-	net.sin_addr.s_addr = inet_addr(strIp.c_str());
-
-}
-
-
-HRET parseNet4FromString (HCSTRR str, HIp4Addr::sockaddr_type& net) {
-
-	memset(&net, 0, sizeof(net));
-	
-	// 127.0.0.1:809
-	HCSTR ip_split = ":";
-	HSIZE pos = str.find(ip_split);
-	if (pos == HStr::npos || pos == str.length() -1) {
-		HRETURN(INVL_PARA);
-	}
-
-	auto is_ip_str = [] (HCSTRR ip) ->bool {
-		return ip.find_first_not_of("1234567890.") == HSTR::npos;
-	};
-
-	HSTR ssip = str.substr(0, pos);
-	if (!is_ip_str(ssip)) {
-		HRETURN(INVL_PARA);
-	}
-
-	HN iPort = HStr(str.substr(pos+1)).ToN();
-
-	setupNet4WithIpString(ssip, iPort, net);
-
-	HRETURN_OK;
-	
-}
-
-
 }
 
 
@@ -137,32 +98,29 @@ namespace HUICPP {
 HIp4Addr::HIp4Addr(addr_integer_type addr_bytes, HN _port)
 	: m_addr() {
 
-	HIGNORE_RETURN(Setup(addr_bytes, _port));
+	HIGNORE_RETURN(init(addr_bytes, _port));
 
 }
 
-
-HIp4Addr::HIp4Addr(HCSTRR strIp, HN _port) 
+HIp4Addr::HIp4Addr (HCSTRR strIp, HN _port) 
 	: m_addr() {
 
-	HIGNORE_RETURN(Setup(strIp, _port));
+	HIGNORE_RETURN(init(strIp, _port));
 	
 }
 
-
-HIp4Addr::HIp4Addr(HCSTRR strIpPort) 
+HIp4Addr::HIp4Addr (HCSTRR strIpPort) 
 	: m_addr() {
 
 	ZERO_MEM(&m_addr, sizeof(m_addr));
-	HIGNORE_RETURN(parseNet4FromString(strIpPort, m_addr));
+	HIGNORE_RETURN(ParseNetFromString(strIpPort, m_addr));
 	
 }
 
-
-HIp4Addr::HIp4Addr(const sockaddr_type& addr) 
+HIp4Addr::HIp4Addr (const sockaddr_type& addr) 
 	: m_addr() {
 
-	HIGNORE_RETURN(Setup(addr));
+	HIGNORE_RETURN(init(addr));
 
 }
 
@@ -170,54 +128,21 @@ HIp4Addr::HIp4Addr(const sockaddr_type& addr)
 HIp4Addr::HIp4Addr(const HIp4Addr& other) 
 	: m_addr() {
 
-	HIGNORE_RETURN(Setup(other.m_addr));
+	HIGNORE_RETURN(init(other.m_addr));
 
 }
 
 
-HRET HIp4Addr::Setup(addr_integer_type addr_bytes, HN _port) {
-
-	m_addr.sin_family = AF_INET;
-	m_addr.sin_port = htons(_port);
-	memcpy(&m_addr.sin_addr.s_addr, &addr_bytes, sizeof(m_addr.sin_addr.s_addr));
-
-	HRETURN_OK;
-}
-
-
-HRET HIp4Addr::Setup(const sockaddr_type& addr) {
-
-	memcpy(&m_addr, &addr, sizeof(m_addr));
-	HRETURN_OK;
-
-}
-
-
-HRET HIp4Addr::Setup(HCSTRR strIp, HN _port) {
-
-	setupNet4WithIpString(strIp, _port, m_addr);
+HRET HIp4Addr::Assign(HCSTRR strIp, HN port) {
 	
-	HRETURN_OK;
+	return init(strIp, port);
 
 }
 
 
-HRET HIp4Addr::SetupPNet(HCSTRR strIp, HN port) {
+HRET HIp4Addr::Assign(const HIp4Addr& other) {
 
-	memset(&m_addr, 0, sizeof(m_addr));
-	m_addr.sin_family = AF_INET;
-	m_addr.sin_port = htons(port);
-
-	int ret = inet_pton(AF_INET, strIp.c_str(), &m_addr.sin_addr);
-	if (ret == 1) {
-		HRETURN_OK;
-	}
-
-	if (ret == 0) {
-		HRETURN(INVL_PARA);
-	}
-
-	HRETURN(SYS_FAILED);
+	return init(other.m_addr);
 
 }
 
@@ -238,7 +163,6 @@ HRET HIp4Addr::Bind (const HSocket& _sock) const {
 	
 }
 
-
 HRET HIp4Addr::Connect (const HSocket& _sock) const {
 
 	SYS_RET_T cb = ::connect(_sock.Fd(), (const struct sockaddr*)&m_addr, sizeof(m_addr));
@@ -247,7 +171,6 @@ HRET HIp4Addr::Connect (const HSocket& _sock) const {
 	HRETURN_OK;
 
 }
-
 
 HRET HIp4Addr::Accept (const HSocket& server, HSocket& client) {
 
@@ -260,7 +183,6 @@ HRET HIp4Addr::Accept (const HSocket& server, HSocket& client) {
 	HRETURN_OK;
 }
 
-
 HRET HIp4Addr::GetFromSocket (const HSocket& sock) {
 
 	socklen_t len = sizeof(m_addr);
@@ -269,7 +191,6 @@ HRET HIp4Addr::GetFromSocket (const HSocket& sock) {
 
 	HRETURN_OK;
 }
-
 
 HRET HIp4Addr::GetAddrInfo (HSTRR strIp, HNR iPort) const {
 
@@ -280,13 +201,11 @@ HRET HIp4Addr::GetAddrInfo (HSTRR strIp, HNR iPort) const {
 
 }
 
-
 HIp4Addr::addr_integer_type HIp4Addr::GetIpInt () const {
 
 	return inet_lnaof(m_addr.sin_addr);
 
 }
-
 
 HSTR HIp4Addr::ToString () const {
 
@@ -300,13 +219,11 @@ HSTR HIp4Addr::ToString () const {
 	return HStr::Format("%s:%d", strIp.c_str(), port);
 }
 
-
 HOFF HIp4Addr::Recvfrom(const HSocket& sock, HPTR buf, HSIZE size, SYS_T flags) {
 	socklen_t len = sizeof(m_addr);
 	return ::recvfrom(sock.Fd(), buf, size, flags, 
 		reinterpret_cast<struct sockaddr*>(&m_addr), &len);
 }
-
 
 HOFF HIp4Addr::Sendto(const HSocket& sock, HCPTR cbuf, HSIZE size, SYS_T flags) const {
 	socklen_t len = sizeof(m_addr);
@@ -314,11 +231,18 @@ HOFF HIp4Addr::Sendto(const HSocket& sock, HCPTR cbuf, HSIZE size, SYS_T flags) 
 		reinterpret_cast<const struct sockaddr*>(&m_addr), len);
 }
 
-
 HRET HIp4Addr::GetLocalIps (HVSTRR ips) {
 	return detail::network_detail::GetLocalIps4(ips);
 }
 
+HRET HIp4Addr::init (addr_integer_type addr_bytes, HN _port) {
+
+	m_addr.sin_family = AF_INET;
+	m_addr.sin_port = htons(_port);
+	memcpy(&m_addr.sin_addr.s_addr, &addr_bytes, sizeof(m_addr.sin_addr.s_addr));
+
+	HRETURN_OK;
+}
 
 HIp4Addr::addr_integer_type HIp4Addr::GetIPByName (HCSTRR strName) {
 	return AddrTypeToInt(detail::network_detail::GetIfAddr(strName));
@@ -438,6 +362,61 @@ void HIp4Addr::GetLocalAddr(struct sockaddr_storage& ss) {
 
 }
 
+
+HRET HIp4Addr::init (HCSTRR strIp, HN _port) {
+
+	return SetupNetWithIpString(strIp, _port, m_addr);
+
+}
+
+HRET HIp4Addr::init (const sockaddr_type& addr) {
+
+	memcpy(&m_addr, &addr, sizeof(m_addr));
+	HRETURN_OK;
+
+}
+
+HRET HIp4Addr::SetupNetWithIpString (HCSTRR ip, HN port, sockaddr_type& net) {
+
+	net.sin_family = AF_INET;
+	net.sin_port = htons(port);
+	net.sin_addr.s_addr = inet_addr(ip.c_str());
+	HRETURN_OK;
+}
+
+HRET HIp4Addr::ParseNetFromString (HCSTRR str, sockaddr_type& net) {
+
+	memset(&net, 0, sizeof(net));
+	
+	// 127.0.0.1:809
+	HCSTR ip_split = ":";
+	HSIZE pos = str.find(ip_split);
+	if (pos == HStr::npos || pos == str.length() -1) {
+		HRETURN(INVL_PARA);
+	}
+
+	auto is_ip_str = [] (HCSTRR ip) ->bool {
+		return ip.find_first_not_of("1234567890.") == HSTR::npos;
+	};
+
+	HSTR ssip = str.substr(0, pos);
+	if (!is_ip_str(ssip)) {
+		HRETURN(INVL_PARA);
+	}
+
+	HN iPort = HStr(str.substr(pos+1)).ToN();
+
+	return SetupNetWithIpString(ssip, iPort, net);
+	
+}
+
+HRET HIp4Addr::GetStringFromNet (const sockaddr_type& addr, HSTRR ip, HNR port) {
+	
+	port = addr.sin_port;
+	ip = inet_ntoa(addr.sin_addr);
+
+	HRETURN_OK;
+}
 
 bool HIp4Addr::IsIp4Str(HCSTRR strIp) {
 

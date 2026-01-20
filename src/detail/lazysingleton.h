@@ -105,14 +105,6 @@ private:
 
 
 
-}
-
-}
-
-
-#ifndef CXXHUICPP
-
-
 class static_singleton_manager {
 public:
     using myself = static_singleton_manager;
@@ -152,8 +144,16 @@ private:
     pointer_map_t m_map;
 }; 
 
+
+}
+
+}
+
+
 #include "lazysingleton_inl.h"
-#endif 
 
 
 #endif // __H_HUICPP_DETAIL_LAZYSINGLETON_H__
+
+
+

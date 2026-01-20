@@ -1,0 +1,3 @@
+
+;; whether lock application.
+CK_applock = 1

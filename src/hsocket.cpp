@@ -9,7 +9,6 @@
 #include <net/if.h>
 #include <sys/fcntl.h>
 #include <sys/types.h>
-#include <arpa/inet.h>
 #include <functional>
 
 namespace HUICPP  {
@@ -285,22 +284,6 @@ HRET HSocket::SetupSendBufLength(HN buf_len) const {
 }
 
 
-HRET HSocket::GetRecvBufferLength(HN & buf_len) const {
-
-	buf_len = 0;
-	socklen_t len = sizeof(buf_len);
-	return GetSockOpt(SO_RCVBUF, static_cast<HPTR>(&buf_len), &len, SOL_SOCKET);
-
-}
-    
-    
-HRET HSocket::SetupRecvBufLength(HN buf_len) const {
-
-	return SetSockOpt(SO_RCVBUF, static_cast<HCPTR>(&buf_len), sizeof(buf_len), SOL_SOCKET);
-
-}
-
-
 HRET HTcpSocket::Init ()  {
 	
 	// close if socket is established.
@@ -444,16 +427,12 @@ HRET HTcpSocket::SetupNodelay (HN val) const {
 
 
 HOFF HDGramSock::Recvfrom (HPTR buf, HSIZE size, SYS_T flags, HAddr& addr) const {
-
 	return addr.Recvfrom(*this, buf, size, flags);
-
 }
 
 
 HOFF HDGramSock::Sendto (HCPTR cbuf, HSIZE size, SYS_T flags, const HAddr& addr) const {
-
 	return addr.Sendto(*this, cbuf, size, flags);
-
 }
 
 
@@ -478,49 +457,6 @@ HOFF HUdpSock::Read(HPTR buf, HSIZE size) const {
 
 HOFF HUdpSock::Write(HCPTR buf, HSIZE size) const {
 	return Send(buf, size);
-}
-
-
-HRET HUdpSock::SetupMulticastLoop() const {
-
-	const HUCH val = 1;
-	return SetSockOpt(IP_MULTICAST_LOOP, &val, sizeof(val), IPPROTO_IP);
-
-}
-
-
-HRET HUdpSock::SetupMulticastInterface(HCSTRR strAddr) const {
-
-	struct in_addr addr;
-
-	HASSERT_RETURN(inet_pton(AF_INET, strAddr.c_str(), &addr) == 1, NETWORK_ERROR);
-
-	return SetSockOpt(IP_MULTICAST_IF, &addr, sizeof(addr), IPPROTO_IP);
-
-}
-
-
-HRET HUdpSock::JoinBroadcast(HCSTRR strIP) const {
-
-	struct ip_mreq imr4;
-
-	imr4.imr_multiaddr.s_addr = inet_addr(strIP.c_str());
-	imr4.imr_interface.s_addr = INADDR_ANY;
-
-	return SetSockOpt(IP_ADD_MEMBERSHIP, &imr4, sizeof(imr4), IPPROTO_IP);
-
-}
-
-
-HRET HUdpSock::LeaveBroadcast(HCSTRR strIP) const {
-
-	struct ip_mreq imr4;
-
-	imr4.imr_multiaddr.s_addr = inet_addr(strIP.c_str());
-	imr4.imr_interface.s_addr = INADDR_ANY;
-
-	return SetSockOpt(IP_DROP_MEMBERSHIP, &imr4, sizeof(imr4), IPPROTO_IP);
-
 }
 
 

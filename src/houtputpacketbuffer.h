@@ -69,8 +69,6 @@ public:
 
     HSocket::size_type WriteIo(const HSocket& sock);
 
-    size_type GetTotalLength() const;
-
     size_type GetDataLength() const;
 
     void Reset();

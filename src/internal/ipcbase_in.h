@@ -11,12 +11,16 @@
 #include "base_traits.h"
 #include "error_in.h"
 
+#include <sys/types.h>
 #include <sys/ipc.h>
 
 namespace HUICPP {
 
 namespace hc_internal {
 
+/*
+    Extend some types for System V IPC key.
+*/
 template<class _Ty>
 struct ipc_traits : public base_traits<_Ty> {
     using base = base_traits<_Ty>;
@@ -31,7 +35,10 @@ struct ipc_traits : public base_traits<_Ty> {
 };
 
 
-template<class _Ty, class _Traits = ipc_traits<_Ty> > 
+/*
+    The base class for System V IPC classess.
+*/
+    template<class _Ty, class _Traits = ipc_traits<_Ty> > 
 class ipc_basic {
 public:
     using traits_type = _Traits;
@@ -42,11 +49,25 @@ public:
     using cmd_type = typename traits_type::cmd_type;
     static constexpr const flag_type DEFAULT_IPC_FLAG = IPC_CREAT | 0600;
 
+private:
+    static constexpr const HN default_proj_id = 2;
+
 public:
     constexpr ipc_basic() noexcept
         : m_key(traits_type::DEF_KEY_VAL), 
             m_id(traits_type::DEF_ID_VAL),
             m_flag(traits_type::DEF_FLAG_VAL) {  }
+    
+    explicit ipc_basic(HCSTRR strFilePath, HN proj_id = default_proj_id) noexcept
+        : m_key(traits_type::DEF_KEY_VAL), m_id(traits_type::DEF_ID_VAL),
+        m_flag(traits_type::DEF_FLAG_VAL) {
+        
+        key_t ret_key = ftok(strFilePath.c_str(), proj_id);
+        if (ret_key != -1) {
+            m_key = ret_key;
+        }
+
+    }
 
     constexpr ipc_basic(key_type key, flag_type flag) noexcept
         : m_key(key), m_id(traits_type::DEF_ID_VAL),

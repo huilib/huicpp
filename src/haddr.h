@@ -71,13 +71,12 @@ public:
 	using sockaddr_type = struct sockaddr_in;
 
 public:
-	HIp4Addr() noexcept = default;
+	HIp4Addr(addr_integer_type addr_bytes = ADDR_DEFA_VALUE, 
+		HN _port = ADDR_DEFA_PORT);
 
-	HIp4Addr(addr_integer_type addr_bytes, HN _port = ADDR_DEFA_PORT);
+	HIp4Addr (HCSTRR strIp, HN _port = ADDR_DEFA_PORT);
 
-	HIp4Addr(HCSTRR strIp, HN _port = ADDR_DEFA_PORT);
-
-	explicit HIp4Addr(HCSTRR strIpPort);
+	explicit HIp4Addr (HCSTRR strIpPort);
 
 	explicit HIp4Addr (const sockaddr_type& addr) ;
 
@@ -86,17 +85,11 @@ public:
 	virtual ~ HIp4Addr() noexcept = default;
 
 public:
-	HRET Setup(addr_integer_type addr_bytes = ADDR_DEFA_VALUE, HN _port = ADDR_DEFA_PORT);
+	HRET Assign(HCSTRR strIp, HN port);
 
-	HRET Setup(HCSTRR strIp, HN _port);
-
-	HRET Setup(const sockaddr_type& addr);
-
-	HRET SetupPNet(HCSTRR strIp, HN port);
+	HRET Assign(const HIp4Addr&);
 
 	void SetPort(HN port);
-
-	const sockaddr_type& GetSockaddr() const { return m_addr; }
 
 public:
 	ADDR_TYPE GetAddrType () const override{
@@ -141,7 +134,21 @@ public:
 
 	static void GetLocalAddr(struct sockaddr_storage&);
 
+protected:
+	HRET init (addr_integer_type addr_bytes = ADDR_DEFA_VALUE, 
+		HN _port = ADDR_DEFA_PORT);
+
+	HRET init (HCSTRR strIp, HN _port);
+
+	HRET init (const sockaddr_type& addr);
+
 public:
+	static HRET SetupNetWithIpString (HCSTRR ip, HN port, sockaddr_type& net); 
+
+	static HRET ParseNetFromString (HCSTRR str, sockaddr_type& net); 
+
+	static HRET GetStringFromNet (const sockaddr_type& addr, HSTRR ip, HNR port);
+
 	static bool IsIp4Str(HCSTRR strIp);
 
 	

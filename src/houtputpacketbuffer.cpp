@@ -101,13 +101,6 @@ HSocket::size_type HIOOutputBuffer::WriteIo(const HSocket& sock) {
 }
 
 
-HIOOutputBuffer::size_type HIOOutputBuffer::GetTotalLength() const {
-
-    return m_header.DataLength() + GetDataLength();
-
-}
-
-
 HIOOutputBuffer::size_type HIOOutputBuffer::GetDataLength() const {
 
     size_type res = 0;

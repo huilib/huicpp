@@ -30,6 +30,18 @@ namespace HUICPP {
 #define HHOT_FUNCTION __attribute__((__hot__))
 #endif //HHOT_FUNCTION
 
+#ifndef HINIT_PRIORITY_CONTROL 
+#define HINIT_PRIORITY_CONTROL
+/*
+    101 is the highest priority allowed by the init_priority attribute.
+    This priority is already used by JEMalloc and other memory allocators,
+    so we will take the next one.
+*/
+#define HINIT_PRIORITY_HIGHEST __attribute__((__init_priority__(102)))
+#define HINIT_PRIORITY_MIDDLE __attribute__((__init_priority__(103)))
+#define HINIT_PRIORITY_LOW __attribute__((__init_priority__(104)))
+#endif //HINIT_PRIORITY_CONTROL
+
 }
 
 #endif //__H_HUICPP_GCC_ATTRIBUTES_IN_H_

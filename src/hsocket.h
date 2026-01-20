@@ -132,10 +132,6 @@ public:
     
     HRET SetupSendBufLength(HN buf_len = 2 * 1024 * 1024) const;
 
-    HRET GetRecvBufferLength(HN & buf_len) const;
-    
-    HRET SetupRecvBufLength(HN buf_len = 2 * 1024 * 1024) const;    
-
     virtual SOCK_TYPE GetSocketType () const noexcept {
 	    return SOCK_TYPE::ST_NORMAL;
     }
@@ -251,15 +247,6 @@ public:
     HOFF Read(HPTR buf, HSIZE size) const override;
 
     HOFF Write(HCPTR buf, HSIZE size) const override;  
-
-    HRET SetupMulticastLoop() const;
-
-    HRET SetupMulticastInterface(HCSTRR strAddr) const;
-
-    HRET JoinBroadcast(HCSTRR strIP) const;
-
-    HRET LeaveBroadcast(HCSTRR strIP) const;
-    
 };
 
 class HUnixScoket : public HDGramSock {

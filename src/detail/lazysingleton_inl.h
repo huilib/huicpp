@@ -15,7 +15,7 @@ struct LazySingletonHolder<_Ty>::Impl: private LazySingletonHolder<_Ty> {
 
 template<typename _Ty>
 template<typename tag>
-inline LazySingletonHolder<_Ty>&  LazySingletonHolder<_Ty>::Singleton() {
+inline LazySingletonHolder<_Ty>& LazySingletonHolder<_Ty>::Singleton() {
     return *static_cast<LazySingletonHolder<_Ty>*>(static_singleton_manager::Instance().Create<Impl<tag> >());
 }
 
@@ -62,3 +62,4 @@ void LazySingletonHolder<_Ty>::create_instance() {
 }
 
 }
+

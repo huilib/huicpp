@@ -20,6 +20,11 @@ struct tag_t {};
 template<typename... _Ty>
 inline constexpr tag_t<_Ty...> tag {};
 */
+
+/*
+    In huicpp, there are many wrapper for some system resource in RIIR mode.
+    base_traits is a type traitor for the resource handler.
+*/
 template <class _Ty>
 struct base_traits {
 
