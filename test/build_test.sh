@@ -4,8 +4,7 @@ dirs=`ls`
 
 for dd in ${dirs}
 do 
-    ## make sure it is a directory. 
-    ## in case 'build_test.sh'
+    ## make sure it is a directory in case 'build_test.sh'
     if [ ! -d ${dd} ]
     then 
         continue
@@ -15,6 +14,7 @@ do
         ## make sure there is a makefile in this directory.
         if [ ! -f "makefile" ]
         then 
+            popd 
             continue 
         fi
 

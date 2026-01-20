@@ -9,12 +9,12 @@
 #define __H_HUICPP_LAZY_SINGLETON_H__
 
 #include "huicpp.h"
-#include "detail/lazysingleton.h"
+#include "detail/lazysingleton/lazysingleton.h"
 
 
 namespace HUICPP{
 
-template<typename _Ty, typename Tag = detail::DefaultLazyTag>
+template<typename _Ty, typename Tag = detail::lazysingle_np::DefaultLazyTag>
 class HLazySingleton {
 public:
     using value_type = _Ty;
@@ -25,8 +25,8 @@ public:
     }
 
 private:
-    static detail::LazySingletonHolder<_Ty>& get_holder() {
-        return detail::LazySingletonHolder<_Ty>::template Singleton<Tag>();
+    static detail::lazysingle_np::LazySingletonHolder<_Ty>& get_holder() {
+        return detail::lazysingle_np::LazySingletonHolder<_Ty>::template Singleton<Tag>();
     }
 
 };

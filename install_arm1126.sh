@@ -44,10 +44,13 @@ pushd ${output_dep}
 		mkdir -p lib include
 		pushd include 
 			mkdir adaptation detail detail/log inl internal process utils image baseinside
+			mkdir detail/scheduler detail/lazysingleton
 			cp ${NOWDIR}/src/*.h ./
 			cp ${NOWDIR}/src/adaptation/*.h ./adaptation/
 			cp ${NOWDIR}/src/detail/*.h ./detail/
 			cp ${NOWDIR}/src/detail/log/*.h ./detail/log/
+			cp ${NOWDIR}/src/detail/scheduler/*.h ./detail/scheduler/
+			cp ${NOWDIR}/src/detail/lazysingleton/*.h ./detail/lazysingleton/
 			cp ${NOWDIR}/src/inl/*.h ./inl/
 			cp ${NOWDIR}/src/internal/*.h ./internal/
 			cp ${NOWDIR}/src/process/*.h ./process/

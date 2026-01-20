@@ -14,12 +14,16 @@ namespace HUICPP {
 
 namespace hc_internal{
 
+/// tag_t
+/// tag 
+///
+/// A generic type-list value type and value.
+///
+/// A type-list is a class template parameterized by a pack of types.
 template<typename...>
 struct tag_t {};
-/*
-template<typename... _Ty>
-inline constexpr tag_t<_Ty...> tag {};
-*/
+template<typename... Ty>
+inline constexpr tag_t<Ty...> tag{};
 
 /*
     In huicpp, there are many wrapper for some system resource in RIIR mode.

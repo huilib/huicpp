@@ -12,7 +12,7 @@ include ../inc.mk
 TARGET = ${LIB_PATH}/libhuicpp.a
 
 SUB_SRCS = adaptation baseinside detail detail/log inl internal utils process systemcall image
-SUB_SRCS += detail/scheduler
+SUB_SRCS += detail/scheduler detail/lazysingleton
 
 ifeq "$(OS_TYPE)" "Darwin"
 LINK_CC_LIBS += -liconv

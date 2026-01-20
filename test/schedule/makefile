@@ -5,7 +5,7 @@
 NOW_DIR = ${shell pwd}
 TEST_PLATCODE=linux64
 
-TARGET=testapp
+TARGET=scheduletest
 
 HUICPP_BASE=${NOW_DIR}/../../deps/${TEST_PLATCODE}/huicpp
 HUICPP_INCLUDE_PATH=${HUICPP_BASE}/include
@@ -13,7 +13,7 @@ HUICPP_LIB_PATH=${HUICPP_BASE}/lib
 CCFLAGS ?= -std=c++17
 
 all:
-	g++ -I${HUICPP_INCLUDE_PATH} ${CCFLAGS} apptest.cpp testapp.cpp -L${HUICPP_LIB_PATH} -lhuicpp -pthread  -o ${TARGET}
+	g++ -I${HUICPP_INCLUDE_PATH} ${CCFLAGS} main.cpp -g -O0 -L${HUICPP_LIB_PATH} -lhuicpp -pthread  -o ${TARGET}
 
 clean:
 	rm -f *.o

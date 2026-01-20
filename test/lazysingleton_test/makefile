@@ -10,9 +10,10 @@ TARGET=lazysingleton
 HUICPP_BASE=${NOW_DIR}/../../deps/${TEST_PLATCODE}/huicpp
 HUICPP_INCLUDE_PATH=${HUICPP_BASE}/include
 HUICPP_LIB_PATH=${HUICPP_BASE}/lib
+CCFLAGS ?= -std=c++17
 
 all:
-	g++ -I${HUICPP_INCLUDE_PATH} test.cpp -L${HUICPP_LIB_PATH} -lhuicpp -pthread  -o ${TARGET}
+	g++ -I${HUICPP_INCLUDE_PATH} ${CCFLAGS} test.cpp -L${HUICPP_LIB_PATH} -lhuicpp -pthread  -o ${TARGET}
 
 clean:
 	rm -f *.o
