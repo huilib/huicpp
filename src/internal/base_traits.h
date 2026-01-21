@@ -9,10 +9,17 @@
 #define __H_HUICPP_INTERGRAL_TRAITS_IN_H__
 
 #include "basictypes_in.h"
+#include <typeinfo>
 
 namespace HUICPP {
 
 namespace hc_internal{
+
+// Return &typeid(...) if RTTI is avaliable, nullptr otherwise. 
+// In either case, has type std::type_info const*.
+#ifndef HTYPE_INFO_OF
+#define HTYPE_INFO_OF(...) (&typeid(__VA_ARGS__))
+#endif
 
 /// tag_t
 /// tag 

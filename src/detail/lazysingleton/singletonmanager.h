@@ -1,11 +1,10 @@
 
 
-#ifndef __H_SINGLETON_MANAGER_H__
-#define __H_SINGLETON_MANAGER_H__
+#ifndef __H_HUICPP_DETAIL_LAZYSINGLETON_SINGLETON_MANAGER_H__
+#define __H_HUICPP_DETAIL_LAZYSINGLETON_SINGLETON_MANAGER_H__
 
-#include "../../huicpp.h"
 
-using namespace HUICPP;
+#include "staticsingletonholder_in.h"
 
 namespace HUICPP {
 
@@ -13,9 +12,12 @@ namespace detail {
 
 namespace lazysingle_np {
 
-class SingletonManagerWithRtti {
+using static_singleton_manager = StaticSingletonHolder;
 
-};
+template<typename Ty, typename Tag>
+HATTRI_VISIBILITY_HIDDEN Ty& CreateGlobal() {
+
+    return static_singleton_manager::Create<Ty, Tag>();
 
 }
 
@@ -23,5 +25,9 @@ class SingletonManagerWithRtti {
 
 }
 
-#endif // __H_SINGLETON_MANAGER_H__
+}
+
+
+
+#endif // __H_HUICPP_DETAIL_LAZYSINGLETON_SINGLETON_MANAGER_H__
 

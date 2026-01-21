@@ -9,7 +9,7 @@ namespace lazysingle_np {
 
 template<typename _Ty>
 template<typename tag>
-struct LazySingletonHolder<_Ty>::Impl: private LazySingletonHolder<_Ty> {
+struct LazySingletonHolder<_Ty>::Impl: LazySingletonHolder<_Ty> {
     Impl() 
         : LazySingletonHolder<_Ty> ({typeid(_Ty), typeid(tag)}) { }
 };
@@ -18,7 +18,7 @@ struct LazySingletonHolder<_Ty>::Impl: private LazySingletonHolder<_Ty> {
 template<typename _Ty>
 template<typename tag>
 inline LazySingletonHolder<_Ty>& LazySingletonHolder<_Ty>::Singleton() {
-    return *static_cast<LazySingletonHolder<_Ty>*>(static_singleton_manager::Instance().Create<Impl<tag> >());
+    return CreateGlobal<Impl<tag>, tag>();
 }
 
 

@@ -1,7 +1,7 @@
 
 
-#ifndef __H_HUICPP_DETAIL_LAZYSINGLETON_H__
-#define __H_HUICPP_DETAIL_LAZYSINGLETON_H__
+#ifndef __H_HUICPP_DETAIL_LAZYSINGLETON_LAZYSINGLETON_H__
+#define __H_HUICPP_DETAIL_LAZYSINGLETON_LAZYSINGLETON_H__
 
 #include "singletonmanager.h"
 #include <typeindex>
@@ -106,47 +106,6 @@ private:
 };
 
 
-
-class static_singleton_manager {
-public:
-    using myself = static_singleton_manager;
-
-public:
-    static myself& Instance();
-
-public:
-    static_singleton_manager ();
-
-
-    template<typename _Ty>
-    HPTR Create() {
-        auto exists_ptr = get_existing<_Ty>();
-        if (exists_ptr == nullptr) {
-            auto const ptr = new _Ty();
-            CHECK_NEWPOINT(ptr);
-            std::lock_guard<std::mutex> lg(m_mutex);
-            m_map[typeid(_Ty)] = ptr;
-            return ptr;
-        }
-        return exists_ptr;
-    }
-
-private:
-    template<typename _Ty>
-    HPTR get_existing() {
-        std::lock_guard<std::mutex> lg(m_mutex);
-        auto const cit = m_map.find(typeid(_Ty));
-        return cit == m_map.cend() ? nullptr : cit->second;
-    }
-
-
-private:
-    using pointer_map_t = std::map<std::type_index, HPTR>;
-    std::mutex m_mutex;
-    pointer_map_t m_map;
-}; 
-
-
 }
 
 }
@@ -157,7 +116,7 @@ private:
 #include "lazysingleton_inl.h"
 
 
-#endif // __H_HUICPP_DETAIL_LAZYSINGLETON_H__
+#endif // __H_HUICPP_DETAIL_LAZYSINGLETON_LAZYSINGLETON_H__
 
 
 

@@ -18,6 +18,11 @@ namespace HUICPP {
 #define HNONNULL_INPUT_POINTER(params) __attribute__ ((__nonnull__ params))
 #endif //HNONNULL_INPUT_POINTER
 
+#ifndef HNON_INLINE     
+// make sure implementation in source file.
+#define HNON_INLINE __attribute__((__noinline__))
+#endif //HNON_INLINE
+
 #ifndef HALWAYS_INLINE
 #define HALWAYS_INLINE inline __attribute__((__always_inline__))
 #endif //HALWAYS_INLINE
@@ -29,6 +34,11 @@ namespace HUICPP {
 #ifndef HHOT_FUNCTION
 #define HHOT_FUNCTION __attribute__((__hot__))
 #endif //HHOT_FUNCTION
+
+// attribute hidden
+#ifndef HATTRI_VISIBILITY_HIDDEN
+#define HATTRI_VISIBILITY_HIDDEN __attribute__((__visibility__("hidden")))
+#endif // HATTRI_VISIBILITY_HIDDEN
 
 #ifndef HINIT_PRIORITY_CONTROL 
 #define HINIT_PRIORITY_CONTROL
