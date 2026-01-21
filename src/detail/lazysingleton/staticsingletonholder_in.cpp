@@ -1,6 +1,7 @@
 
 
 #include "staticsingletonholder_in.h"
+#include "../../hindestructible.h"
 #include <typeindex>
 #include <mutex>
 
@@ -11,10 +12,7 @@ namespace detail {
 
 namespace lazysingle_np {
 
-
 namespace {
-
-
 
 class StaticSingletonHolderImpl {
 public:
@@ -25,8 +23,9 @@ public:
     static Self& Instance() {
         // key-pointer: we will implement as an indestructible memory.
         // Indestructible memory must always live in the .cpp file.
-        static StaticSingletonHolderImpl _instance;
-        return _instance;
+        static Indestructible<StaticSingletonHolderImpl> instance;
+        //static StaticSingletonHolderImpl instance;
+        return instance;
     }
 
 public:

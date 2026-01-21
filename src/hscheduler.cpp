@@ -20,7 +20,7 @@ HSingleScheduler::~HSingleScheduler() noexcept {
 
 void HSingleScheduler::SetBackgroundHanding(handler_t sfd, flags_t flags, background_proc_t&& bc) noexcept {
 
-    m_handlers.AddHandle(sfd, flags, std::move(bc));
+    m_handlers.AddHandle(sfd, flags, std::forward<background_proc_t>(bc));
 
 }
 
@@ -34,7 +34,7 @@ void HSingleScheduler::RemoveBackgroundHandling(handler_t sfd) noexcept {
 
 trigger_id HSingleScheduler::CreateTrigger(trigger_proc_t&& bc) noexcept {
 
-    return m_trigers.CreateTrigger(std::move(bc));
+    return m_trigers.CreateTrigger(std::forward<trigger_proc_t>(bc));
 
 }
 

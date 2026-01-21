@@ -9,6 +9,7 @@ namespace detail {
 
 namespace scheduler_np {
 
+    
 SelectHandlerMap::SelectHandlerMap() noexcept
     : m_handlers() {
 
@@ -23,7 +24,7 @@ SelectHandlerMap::~ SelectHandlerMap() noexcept {
 void SelectHandlerMap::AddHandle(handler_t socketNum, flags_t conditionSet, 
         background_proc_t&& handlerProc) noexcept {
     
-    m_handlers.AssignHandler(socketNum, conditionSet, std::move(handlerProc));
+    m_handlers.AssignHandler(socketNum, conditionSet, std::forward<background_proc_t>(handlerProc));
 
 }
 

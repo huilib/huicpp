@@ -31,7 +31,7 @@ void SchedulerBase::StopLoop() noexcept {
 void SchedulerBase::ScheduleDelayTask(HULL microseconds, delay_proc_t&& proc) noexcept {
 
     DelayInterval timeToDelay(static_cast<HLN>(microseconds / MILLION), static_cast<HLN>( microseconds % MILLION));
-    AlterHandler* alarmHandler = new AlterHandler(timeToDelay, std::move(proc));
+    AlterHandler* alarmHandler = new AlterHandler(timeToDelay, std::forward<delay_proc_t>(proc));
 
     m_task_queue.AddEntry(alarmHandler);
 

@@ -79,7 +79,7 @@ void HandlerSet::AssignHandler(handler_t socketNum, flags_t conditionSet, backgr
     }
 
     handler->SetFlags(conditionSet);
-    handler->SetProc(std::move(handlerProc));
+    handler->SetProc(std::forward<background_proc_t>(handlerProc));
 
 }
 

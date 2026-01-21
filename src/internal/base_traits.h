@@ -32,6 +32,9 @@ struct tag_t {};
 template<typename... Ty>
 inline constexpr tag_t<Ty...> tag{};
 
+template<typename Ty>
+using aligned_storage_for_t = typename std::aligned_storage<sizeof(Ty), alignof(Ty)>::type;
+
 /*
     In huicpp, there are many wrapper for some system resource in RIIR mode.
     base_traits is a type traitor for the resource handler.
